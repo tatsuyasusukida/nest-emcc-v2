@@ -163,10 +163,7 @@ export class AppController {
         .filter((line) => {
           return (
             !knownUndefinedSymbols.some((symbol) => {
-              return (
-                line ===
-                `warning: undefined symbol: ${symbol} (referenced by top-level compiled C/C++ code)`
-              );
+              return line.startsWith(`warning: undefined symbol: ${symbol}`);
             }) &&
             !line.startsWith('emcc: warning:') &&
             !line.startsWith('emcc: error:') &&
