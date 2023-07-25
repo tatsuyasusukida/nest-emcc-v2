@@ -18,9 +18,14 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "activate": "gcloud config configurations activate default",
-    "list": "gcloud meta list-files-for-upload",
-    "deploy": "npm run activate && gcloud run deploy nest-emcc-v2 --source . --platform managed --region asia-northeast1 --allow-unauthenticated"
+    "gcp:activate": "gcloud config configurations activate default",
+    "gcp:list": "gcloud meta list-files-for-upload",
+    "gcp:image": "echo asia-northeast1-docker.pkg.dev/`gcloud config get-value project`/cloud-run-source-deploy/nest-emcc-v2:latest",
+    "gcp:build-run-image": "docker build -t nest-emcc-v2-run -f run.Dockerfile .",
+    "gcp:build": "pack build `npm run -s gcp:image` --builder gcr.io/buildpacks/builder --run-image nest-emcc-v2-run",
+    "gcp:push": "docker push `npm run -s gcp:image`",
+    "gcp:deploy-only": "gcloud run deploy nest-emcc-v2 --image `npm run -s gcp:image` --platform managed --region asia-northeast1 --allow-unauthenticated",
+    "gcp:deploy": "npm run gcp:activate && npm run gcp:build && npm run gcp:push && npm run gcp:deploy-only"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

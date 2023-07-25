@@ -167,7 +167,8 @@ export class AppController {
             }) &&
             !line.startsWith('emcc: warning:') &&
             !line.startsWith('emcc: error:') &&
-            !line.startsWith('cache:INFO:')
+            !line.startsWith('cache:INFO:') &&
+            !line.startsWith('shared:INFO:')
           );
         })
         .join('\n');
