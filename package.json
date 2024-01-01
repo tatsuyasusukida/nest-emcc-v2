@@ -23,6 +23,7 @@
     "gcp:image": "echo asia-northeast1-docker.pkg.dev/`gcloud config get-value project`/cloud-run-source-deploy/nest-emcc-v2:latest",
     "gcp:build-run-image": "docker build -t nest-emcc-v2-run -f run.Dockerfile .",
     "gcp:build": "pack build `npm run -s gcp:image` --builder gcr.io/buildpacks/builder --run-image nest-emcc-v2-run",
+    "gcp:run": "docker run --rm --env CORS_ORIGIN='http://localhost:3000' --env PORT='8080' -p 127.0.0.1:8080:8080 --platform linux/amd64 `npm run -s gcp:image`",
     "gcp:push": "docker push `npm run -s gcp:image`",
     "gcp:deploy-only": "gcloud run deploy nest-emcc-v2 --image `npm run -s gcp:image` --platform managed --region asia-northeast1 --allow-unauthenticated",
     "gcp:deploy": "npm run gcp:activate && npm run gcp:build && npm run gcp:push && npm run gcp:deploy-only"
